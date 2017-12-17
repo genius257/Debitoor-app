@@ -1,7 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, ListView, Button, TouchableHighlight, ScrollView } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import Icon from 'react-native-vector-icons/FontAwesome'
+import Icon from 'react-native-vector-icons/FontAwesome';
+//import Markdown from 'react-native-easy-markdown';
+import base64 from 'base-64';
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -55,12 +57,28 @@ const DetailsScreen = class DetailsScreen extends React.Component {
     super(props);
     this.state = {
       subscribers_count: "...",
+      mk: '',
     };
     fetch(this.props.navigation.state.params.url)
     .then((response) => response.json())
     .then((json) => {
       this.setState({subscribers_count: json.subscribers_count});
     });
+    /*
+    fetch(this.props.navigation.state.params.url+"/readme")
+    .then((response) => response.json())
+    .then((json) => {
+      //console.log(this.props.navigation.state.params.url+'/readme');
+      //console.log(json.encoding);
+      //console.log(json.content);
+      //console.log(typeof json);
+      if(json.encoding!="base64"){return;}
+      //console.log(base64.decode(json.content)+'');
+      //this.setState({mk: base64.decode(json.content)});
+      this.state.mk=base64.decode(json.content);
+
+      this.forceUpdate();
+    });*/
   }
   render(){
     const params = this.props.navigation.state.params;
@@ -90,6 +108,7 @@ const DetailsScreen = class DetailsScreen extends React.Component {
           </View>
           <Text style={{paddingLeft:10,fontSize:30}}>{params.forks_count}</Text>
         </View>
+        <View style={{borderBottomWidth:1,borderColor:"#000",opacity:0.1,marginBottom:10,marginTop:10}}></View>
       </View>
     );
   }
